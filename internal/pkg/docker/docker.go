@@ -19,13 +19,13 @@ func List() []ContainerApp {
 	defer apiClient.Close()
 
 	containers, err := apiClient.ContainerList(context.Background(), container.ListOptions{All: true})
+	result := []ContainerApp{}
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		return result
 	}
-
 	log.Printf("Found %d running container(s)", len(containers))
 
-	result := []ContainerApp{}
 	for _, ctr := range containers {
 		if len(ctr.Ports) == 0 {
 			continue

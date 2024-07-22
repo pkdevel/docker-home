@@ -25,7 +25,7 @@ func SetupAndServe() {
 	http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
 		url, err := url.Parse(r.Referer())
 		if err != nil {
-			log.Fatal(err)
+			log.Panic(err)
 			http.Redirect(w, r, "/500", http.StatusFound)
 			return
 		}
@@ -46,7 +46,7 @@ func SetupAndServe() {
 	http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
 		_, err := os.Open("./assets/" + r.URL.Path[1:])
 		if err != nil {
-			log.Fatal(err)
+			log.Print(err)
 			http.Redirect(w, r, "/404", http.StatusFound)
 			return
 		}
