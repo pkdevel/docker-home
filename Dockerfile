@@ -27,5 +27,6 @@ LABEL description="A simple docker home page"
 EXPOSE 8080
 COPY --from=tailwindcss /app/assets /assets
 COPY --from=builder /app/main /docker-home
+WORKDIR /
 ENTRYPOINT ["/docker-home"]
 
