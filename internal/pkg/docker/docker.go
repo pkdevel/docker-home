@@ -14,16 +14,16 @@ func List() []ContainerApp {
 		client.WithAPIVersionNegotiation(),
 	)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 	defer apiClient.Close()
 
 	containers, err := apiClient.ContainerList(context.Background(), container.ListOptions{All: true})
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
-	log.Printf("Found %d containers", len(containers))
+	log.Printf("Found %d running container(s)", len(containers))
 
 	result := []ContainerApp{}
 	for _, ctr := range containers {
@@ -38,17 +38,18 @@ func List() []ContainerApp {
 		}
 
 		app := ContainerApp{
+			ctr.ID,
 			strings.TrimPrefix(ctr.Names[0], "/"),
 			ctr.Ports[0].PublicPort,
 			ctr.Ports[0].PrivatePort,
 		}
 		result = append(result, app)
-		log.Printf("Name: %s, Port: %v", app.Name, app.Port)
 	}
 	return result
 }
 
 type ContainerApp struct {
+	ID          string
 	Name        string
 	Port        uint16
 	PrivatePort uint16
