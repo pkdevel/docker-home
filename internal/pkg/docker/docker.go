@@ -25,8 +25,8 @@ func List() []ContainerApp {
 
 	log.Printf("Found %d containers", len(containers))
 
-	result := make([]ContainerApp, len(containers))
-	for i, ctr := range containers {
+	result := []ContainerApp{}
+	for _, ctr := range containers {
 		if len(ctr.Ports) == 0 {
 			continue
 		}
@@ -37,12 +37,13 @@ func List() []ContainerApp {
 			continue
 		}
 
-		name := strings.TrimPrefix(ctr.Names[0], "/")
-		port := ctr.Ports[0].PublicPort
-		result[i] = ContainerApp{name, port}
-		log.Printf("Name: %s, Port: %v", name, port)
+		app := ContainerApp{
+			strings.TrimPrefix(ctr.Names[0], "/"),
+			ctr.Ports[0].PublicPort,
+		}
+		result = append(result, app)
+		log.Printf("Name: %s, Port: %v", app.Name, app.Port)
 	}
-
 	return result
 }
 
