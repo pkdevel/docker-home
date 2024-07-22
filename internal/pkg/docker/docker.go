@@ -27,6 +27,16 @@ func List() []ContainerApp {
 
 	result := make([]ContainerApp, len(containers))
 	for i, ctr := range containers {
+		if len(ctr.Ports) == 0 {
+			continue
+		}
+		if ctr.Ports[0].Type != "tcp" {
+			continue
+		}
+		if ctr.Ports[0].PublicPort == 0 {
+			continue
+		}
+
 		name := strings.TrimPrefix(ctr.Names[0], "/")
 		port := ctr.Ports[0].PublicPort
 		result[i] = ContainerApp{name, port}
