@@ -1,3 +1,4 @@
 .obsidian
 assets/style.css
 web/template/**/*[.go,.txt]
+data/
