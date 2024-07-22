@@ -1,0 +1,29 @@
+FROM golang:1.22-alpine3.20 AS fetcher
+COPY go.mod go.sum /app/
+WORKDIR /app
+RUN go mod download
+
+FROM ghcr.io/a-h/templ:latest AS templ
+COPY --chown=65532:65532 ./web/. /app/web
+WORKDIR /app
+RUN ["templ", "generate"]
+
+FROM d3fk/tailwindcss:latest AS tailwindcss
+COPY ./assets/. /app/assets
+COPY ./web/. /app/web
+WORKDIR /app
+RUN ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/style/tailwind.css", "-o", "assets/style.css", "-m"]
+
+FROM fetcher AS builder
+COPY ./. /app
+COPY --from=templ /app/web/. /app/web
+WORKDIR /app
+RUN go build -o main ./cmd/main.go
+
+FROM alpine:3.20 AS assembler
+EXPOSE 8080
+COPY --from=tailwindcss /app/assets /app/assets
+COPY --from=builder /app/main /app/main
+WORKDIR /app
+ENTRYPOINT ["/app/main"]
+
