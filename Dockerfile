@@ -1,4 +1,4 @@
-FROM golang:1.22-alpine3.20 AS fetcher
+FROM golang:1.22 AS fetcher
 COPY go.mod go.sum /app/
 WORKDIR /app
 RUN go mod download
@@ -20,7 +20,8 @@ COPY --from=templ /app/web/. /app/web
 WORKDIR /app
 RUN go build -o main ./cmd/main.go
 
-FROM alpine:3.20 AS assembler
+# FROM alpine:3.20 AS assembler
+FROM golang:1.22 AS assembler
 LABEL name="docker-home"
 LABEL description="A simple docker home page"
 EXPOSE 8080
