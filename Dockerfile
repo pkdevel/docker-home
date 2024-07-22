@@ -18,7 +18,7 @@ FROM fetcher AS builder
 COPY ./. /app
 COPY --from=templ /app/web/. /app/web
 WORKDIR /app
-RUN go build -o main ./cmd/main.go
+RUN go build -v -o main ./cmd/main.go
 
 # FROM alpine:3.20 AS assembler
 FROM golang:1.22 AS assembler
