@@ -9,7 +9,7 @@ import (
 	"strings"
 
 	"github.com/a-h/templ"
-	"github.com/pkdevel/docker-home/internal/pkg/docker"
+	"github.com/pkdevel/docker-home/internal/pkg/model"
 	"github.com/pkdevel/docker-home/web/template/pages"
 	"github.com/pkdevel/docker-home/web/template/segments"
 )
@@ -21,6 +21,7 @@ func SetupAndServe() {
 	http.Handle("/", templ.Handler(pages.Index()))
 
 	// segments
+	containers := model.GetContainers()
 	http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
 		url, err := url.Parse(r.Referer())
 		if err != nil {
@@ -29,14 +30,14 @@ func SetupAndServe() {
 			return
 		}
 		hostname := strings.Split(url.Host, ":")[0]
-		containers := docker.List()
+		containers := containers.Find()
 		apps := ContainerApp{}
 		for _, container := range containers {
 			scheme := "http"
-			if container.PrivatePort == 443 {
+			if container.Data.PrivatePort == 443 {
 				scheme += "s"
 			}
-			apps[container.Name] = fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Port)
+			apps[container.Name] = fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Data.Port)
 		}
 		segments.List(apps).Render(r.Context(), w)
 	})
