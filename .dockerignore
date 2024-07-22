@@ -1,10 +1,12 @@
 .git
 .gitignore
+.obsidian
 
 LICENSE
-README.md
+*.md
 
 Makefile
+Dockerfile
 
 assets/style.css
 web/**/*.go
