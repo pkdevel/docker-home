@@ -37,6 +37,16 @@ func main() {
 		segments.List(apps).Render(r.Context(), w)
 	})
 
+	// assets
+	http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
+		_, err := os.Open("./assets/" + r.URL.Path[1:])
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		http.ServeFile(w, r, "./assets/"+r.URL.Path[1:])
+	})
+
 	log.Println("Starting server")
 	log.Panic(http.ListenAndServe(":8080", nil))
 
