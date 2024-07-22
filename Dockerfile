@@ -21,6 +21,8 @@ WORKDIR /app
 RUN go build -o main ./cmd/main.go
 
 FROM alpine:3.20 AS assembler
+LABEL name="docker-home"
+LABEL description="A simple docker home page"
 EXPOSE 8080
 COPY --from=tailwindcss /app/assets /app/assets
 COPY --from=builder /app/main /app/main

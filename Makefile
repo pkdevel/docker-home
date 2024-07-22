@@ -27,6 +27,9 @@ run: generate
 clean:
 	@echo "GO: Cleaning"
 	@go clean
+	@echo "DOCKER: Cleaning"
+	@docker image prune --filter label=name=docker-home --force --all
+	@docker builder prune --force
 
 go-watch: _gow
 	gow run ./cmd/main.go
