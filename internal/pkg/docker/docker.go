@@ -9,17 +9,28 @@ import (
 	"github.com/docker/docker/client"
 )
 
-func List() []ContainerApp {
-	apiClient, err := client.NewClientWithOpts(
+type DockerClient struct {
+	api *client.Client
+}
+
+func NewDockerClient() *DockerClient {
+	api, err := client.NewClientWithOpts(
 		client.WithAPIVersionNegotiation(),
 	)
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer apiClient.Close()
+	return &DockerClient{api}
+}
 
-	containers, err := apiClient.ContainerList(context.Background(), container.ListOptions{All: true})
+func (c *DockerClient) Close() {
+	c.api.Close()
+}
+
+func (c *DockerClient) List() []ContainerApp {
 	result := []ContainerApp{}
+
+	containers, err := c.api.ContainerList(context.Background(), container.ListOptions{All: true})
 	if err != nil {
 		log.Println(err)
 		return result
