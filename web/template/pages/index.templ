@@ -1,0 +1,40 @@
+package pages
+
+templ Index() {
+	<!DOCTYPE html>
+	<html>
+		@head()
+		<body class="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
+			@header()
+			<div id="content" class="flex items-center justify-center w-screen h-screen p-10 space-x-6">
+				<div class="max-w-sm mx-auto">
+					<div>
+						<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
+					</div>
+				</div>
+			</div>
+		</body>
+	</html>
+}
+
+templ header() {
+	<div id="header" class="flex items-center justify-center w-screen p-6 bg-sky-600">
+		<p class="text-sky-100 text-2xl">Docker Home</p>
+	</div>
+}
+
+templ head() {
+	<head>
+		<meta charset="UTF-8"/>
+		<title>Docker Home</title>
+		<!-- style -->
+		<link href="style.css" rel="stylesheet"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<!-- favicon -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
+		<!-- htmx -->
+		<script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
+	</head>
+}

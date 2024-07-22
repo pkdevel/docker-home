@@ -1,0 +1,17 @@
+package segments
+
+templ List(values map[string]string) {
+	<ul class="list-inside list-disc">
+		for name, url := range values {
+			<li>
+				@href(name, url)
+			</li>
+		}
+	</ul>
+}
+
+templ href(name string, url string) {
+	<a href={ templ.SafeURL(url) } target="_blank">
+		{ name }
+	</a>
+}
