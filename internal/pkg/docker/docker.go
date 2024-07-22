@@ -40,6 +40,7 @@ func List() []ContainerApp {
 		app := ContainerApp{
 			strings.TrimPrefix(ctr.Names[0], "/"),
 			ctr.Ports[0].PublicPort,
+			ctr.Ports[0].PrivatePort,
 		}
 		result = append(result, app)
 		log.Printf("Name: %s, Port: %v", app.Name, app.Port)
@@ -48,6 +49,7 @@ func List() []ContainerApp {
 }
 
 type ContainerApp struct {
-	Name string
-	Port uint16
+	Name        string
+	Port        uint16
+	PrivatePort uint16
 }

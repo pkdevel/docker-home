@@ -33,7 +33,11 @@ func main() {
 		containers := docker.List()
 		apps := ContainerApp{}
 		for _, container := range containers {
-			apps[container.Name] = fmt.Sprintf("http://%s:%d", hostname, container.Port)
+			scheme := "http"
+			if container.PrivatePort == 443 {
+				scheme += "s"
+			}
+			apps[container.Name] = fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Port)
 		}
 		segments.List(apps).Render(r.Context(), w)
 	})
