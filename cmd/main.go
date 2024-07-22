@@ -26,6 +26,7 @@ func main() {
 		log.Println(url.Host)
 		if err != nil {
 			log.Fatal(err)
+			http.Redirect(w, r, "/500", http.StatusFound)
 			return
 		}
 		hostname := strings.Split(url.Host, ":")[0]
@@ -42,9 +43,20 @@ func main() {
 		_, err := os.Open("./assets/" + r.URL.Path[1:])
 		if err != nil {
 			log.Fatal(err)
+			http.Redirect(w, r, "/404", http.StatusFound)
 			return
 		}
 		http.ServeFile(w, r, "./assets/"+r.URL.Path[1:])
+	})
+
+	// errors
+	http.HandleFunc("/404", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		pages.NotFound().Render(r.Context(), w)
+	})
+	http.HandleFunc("/500", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error().Render(r.Context(), w)
 	})
 
 	log.Println("Starting server")
