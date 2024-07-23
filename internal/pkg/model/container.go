@@ -11,7 +11,7 @@ import (
 
 type Containers struct{ db *bolt.DB }
 
-func GetContainers() Containers { return Containers{persistence.Open()} }
+func GetContainers() Containers { return Containers{persistence.Database()} }
 func (c *Containers) Close()    { c.db.Close() }
 
 type Container struct {
