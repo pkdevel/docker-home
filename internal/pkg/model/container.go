@@ -56,7 +56,7 @@ func (c *Containers) Find() []Container {
 	var result []Container
 	rows, err := c.db.Query("SELECT * FROM containers")
 	if err != nil {
-		log.Panic("failed to execute query: ", err)
+		log.Panic(err)
 		return result
 	}
 	defer rows.Close()
@@ -69,7 +69,7 @@ func (c *Containers) Find() []Container {
 			&container.Data,
 			&container.updatedAt,
 		); err != nil {
-			log.Panic("Error scanning row:", err)
+			log.Panic(err)
 			return result
 		}
 
@@ -77,7 +77,7 @@ func (c *Containers) Find() []Container {
 	}
 
 	if err := rows.Err(); err != nil {
-		log.Panic("Error during rows iteration: ", err)
+		log.Panic(err)
 	}
 	return result
 }
@@ -85,7 +85,7 @@ func (c *Containers) Find() []Container {
 func (c *Containers) Save(item Container) {
 	data, err := json.Marshal(item.Data)
 	if err != nil {
-		log.Panic("failed to encode data: ", err)
+		log.Panic(err)
 	}
 	query := `INSERT OR REPLACE
     INTO containers (id, data, updated_at)
@@ -94,6 +94,6 @@ func (c *Containers) Save(item Container) {
 	item.updatedAt = time.Now()
 	_, err = c.db.Exec(query, item.Name, data, item.updatedAt)
 	if err != nil {
-		log.Panic("failed to execute query: ", err)
+		log.Panic(err)
 	}
 }
