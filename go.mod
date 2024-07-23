@@ -4,7 +4,7 @@ go 1.22.5
 
 require (
 	github.com/a-h/templ v0.2.747
-	github.com/docker/docker v27.0.3+incompatible
+	github.com/docker/docker v27.1.0+incompatible
 	github.com/tursodatabase/go-libsql v0.0.0-20240429120401-651096bbee0b
 )
 
