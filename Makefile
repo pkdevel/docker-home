@@ -6,8 +6,15 @@ docker-run:
 	@echo "DOCKER: Starting container"
 	@docker run --rm -d \
 		-v /var/run/docker.sock:/var/run/docker.sock \
-		-p 9080:8080 \
+		-p 6969:8080 \
 		--name=docker-home \
+		pkdevel/docker-home
+
+docker: docker-build
+	@echo "DOCKER: Running container"
+	@docker run --rm -it \
+		-v /var/run/docker.sock:/var/run/docker.sock \
+		-p 6969:8080 \
 		pkdevel/docker-home
 
 generate: _gow _templ _tailwind
