@@ -19,7 +19,7 @@ func GetContainers() Containers {
 	query := `CREATE TABLE IF NOT EXISTS containers (
     id TEXT PRIMARY KEY UNIQUE NOT NULL,
     data BLOB NOT NULL,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL
+    updated_at TEXT NOT NULL
   )`
 	_, err := db.Exec(query)
 	if err != nil {
