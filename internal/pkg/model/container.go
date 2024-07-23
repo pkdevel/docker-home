@@ -33,9 +33,9 @@ func (c *Containers) Close() {
 }
 
 type Container struct {
+	updatedAt time.Time     `db:"updated_at"`
 	Name      string        `db:"id"`
 	Data      ContainerData `db:"data"`
-	updatedAt time.Time     `db:"updated_at"`
 }
 
 type ContainerData struct {
