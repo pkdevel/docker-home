@@ -29,8 +29,12 @@ func StartImporter() {
 func importContainers(docker *docker.DockerClient, containers model.Containers) {
 	for _, container := range docker.List() {
 		containers.Save(model.Container{
-			Name: container.Name,
-			Data: model.ContainerData{Port: container.Port, PrivatePort: container.PrivatePort},
+			ID: container.Name,
+			Data: model.ContainerData{
+				Name:        container.Name,
+				Port:        container.Port,
+				PrivatePort: container.PrivatePort,
+			},
 		})
 		log.Printf("Importing %s (%s)", container.Name, container.ID)
 	}

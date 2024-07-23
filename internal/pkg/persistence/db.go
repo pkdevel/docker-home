@@ -1,21 +1,27 @@
 package persistence
 
 import (
-	"database/sql"
+	"io/fs"
 	"log"
 	"os"
+	"time"
 
-	_ "github.com/tursodatabase/go-libsql"
+	bolt "go.etcd.io/bbolt"
 )
 
-func Open() *sql.DB {
-	if err := os.MkdirAll("./data", os.ModePerm); err != nil {
-		log.Fatal(err)
+var instance *bolt.DB
+
+func Open() *bolt.DB {
+	if instance == nil {
+		err := os.MkdirAll("data", fs.ModeDir|fs.ModePerm)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		instance, err = bolt.Open("data/bolt.db", fs.ModePerm, &bolt.Options{Timeout: 5 * time.Second})
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
-	dbName := "file:./data/local.db"
-	db, err := sql.Open("libsql", dbName)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return db
+	return instance
 }

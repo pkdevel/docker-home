@@ -39,7 +39,7 @@ func SetupAndServe() {
 			}
 
 			apps = append(apps, ContainerApp{
-				container.Name,
+				container.Data.Name,
 				fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Data.Port),
 			})
 		}
