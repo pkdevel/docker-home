@@ -31,14 +31,19 @@ func SetupAndServe() {
 		}
 		hostname := strings.Split(url.Host, ":")[0]
 		containers := containers.Find()
-		apps := ContainerApp{}
+		apps := []segments.ContainerApp{}
 		for _, container := range containers {
 			scheme := "http"
 			if container.Data.PrivatePort == 443 {
 				scheme += "s"
 			}
-			apps[container.Name] = fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Data.Port)
+
+			apps = append(apps, ContainerApp{
+				container.Name,
+				fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Data.Port),
+			})
 		}
+
 		segments.List(apps).Render(r.Context(), w)
 	})
 
@@ -71,4 +76,15 @@ func SetupAndServe() {
 	}()
 }
 
-type ContainerApp map[string]string
+type ContainerApp struct {
+	name string
+	url  string
+}
+
+func (c ContainerApp) Name() string {
+	return c.name
+}
+
+func (c ContainerApp) URL() string {
+	return c.url
+}

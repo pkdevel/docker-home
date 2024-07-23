@@ -1,10 +1,15 @@
 package segments
 
-templ List(values map[string]string) {
+type ContainerApp interface {
+	Name() string
+	URL() string
+}
+
+templ List(containers []ContainerApp) {
 	<ul class="list-inside list-disc">
-		for name, url := range values {
+		for _, container := range containers {
 			<li>
-				@href(name, url)
+				@href(container.Name(), container.URL())
 			</li>
 		}
 	</ul>
