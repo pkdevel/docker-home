@@ -31,8 +31,8 @@ clean:
 	@docker image prune --filter label=name=docker-home --force --all
 	@docker builder prune --force
 
-go-watch: _gow
-	gow run ./cmd/main.go
+go-watch: _air
+	air
 
 templ-watch: _templ
 	templ generate -watch
@@ -40,10 +40,10 @@ templ-watch: _templ
 tailwind-watch:
 	tailwindcss -c web/tailwind.config.js -i web/style/tailwind.css -o assets/style.css -mw
 
-_gow:
-	@if ! command -v gow &> /dev/null; then \
-		echo "GO: Installing gow"; \
-		go install github.com/mitranim/gow@latest; \
+_air:
+	@if ! command -v air &> /dev/null; then \
+		echo "GO: Installing air"; \
+		go install github.com/air-verse/air@latest; \
 	fi
 
 _templ:

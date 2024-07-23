@@ -1,6 +1,7 @@
 .git
 .gitignore
 .obsidian
+.air.toml
 
 LICENSE
 *.md
@@ -10,3 +11,6 @@ Dockerfile
 
 assets/style.css
 web/**/*.go
+
+build/
+data/
