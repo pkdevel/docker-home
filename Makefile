@@ -17,7 +17,7 @@ docker: docker-build
 		-p 6969:8080 \
 		pkdevel/docker-home
 
-generate: _gow _templ _tailwind
+generate: _templ _tailwind
 	@echo "TEMPL: Generating templates"
 	@templ generate
 	@echo "TAILWIND: Generating styles"
@@ -37,6 +37,11 @@ clean:
 	@echo "DOCKER: Cleaning"
 	@docker image prune --filter label=name=docker-home --force --all
 	@docker builder prune --force
+	@echo "Cleanup build files"
+	@rm -rf data build
+
+watch:
+	make -j3 templ-watch tailwind-watch go-watch 
 
 go-watch: _air
 	air
@@ -44,7 +49,7 @@ go-watch: _air
 templ-watch: _templ
 	templ generate -watch
 
-tailwind-watch:
+tailwind-watch: _tailwind
 	tailwindcss -c web/tailwind.config.js -i web/style/tailwind.css -o assets/style.css -mw
 
 _air:
