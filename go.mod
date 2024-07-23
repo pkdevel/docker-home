@@ -10,6 +10,7 @@ require (
 
 require (
 	github.com/Microsoft/go-winio v0.4.14 // indirect
+	github.com/a-h/htmlformat v0.0.0-20231108124658-5bd994fe268e // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.0 // indirect
 	github.com/containerd/log v0.1.0 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
@@ -19,6 +20,7 @@ require (
 	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
+	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/libsql/sqlite-antlr4-parser v0.0.0-20240327125255-dbf53b6cbf06 // indirect
 	github.com/moby/docker-image-spec v1.3.1 // indirect
 	github.com/moby/term v0.5.0 // indirect
@@ -33,6 +35,7 @@ require (
 	go.opentelemetry.io/otel/sdk v1.28.0 // indirect
 	go.opentelemetry.io/otel/trace v1.28.0 // indirect
 	golang.org/x/exp v0.0.0-20230515195305-f3d0a9c9a5cc // indirect
+	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.21.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 	gotest.tools/v3 v3.5.1 // indirect

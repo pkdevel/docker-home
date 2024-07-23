@@ -1,5 +1,5 @@
 .obsidian
 assets/style.css
-web/template/**/*[.go,.txt]
+web/template/**/*_templ.*[go,txt]
 build/
 data/
