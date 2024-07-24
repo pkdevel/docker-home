@@ -39,7 +39,7 @@ clean:
 	@docker image prune --filter label=name=docker-home --force --all
 	@docker builder prune --force
 	@echo "Cleanup build files and database"
-	@rm -rf data build
+	@rm -rf data build main
 
 watch:
 	make -j3 templ-watch tailwind-watch go-watch
