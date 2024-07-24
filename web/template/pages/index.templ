@@ -2,14 +2,21 @@ package pages
 
 templ Index() {
 	@page() {
-		<body class="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
-			@header()
-			<div class="flex items-top justify-evenly w-screen h-screen px-2 py-10">
-				<div class="flex flex-col max-w-px items-start"></div>
-				<div class="flex flex-col w-screen items-center">
-					<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
-				</div>
-				<div class="flex flex-col max-w-px items-end"></div>
+		<body class="bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200">
+			<div class="flex flex-col h-screen justify-between">
+				@header()
+				<main class="flex items-top justify-evenly w-full h-full px-4 py-10">
+					<div class="flex flex-col max-w-px items-start">
+						&nbsp;
+					</div>
+					<div class="flex flex-col w-full items-center">
+						<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
+					</div>
+					<div class="flex flex-col max-w-px items-end">
+						&nbsp;
+					</div>
+				</main>
+				@footer()
 			</div>
 		</body>
 	}
@@ -21,20 +28,6 @@ templ page() {
 		@head()
 		{ children... }
 	</html>
-}
-
-templ header() {
-	<div id="header" class="flex items-center justify-between w-screen px-2 py-4 bg-sky-600">
-		<div class="flex justify-start w-1/4">
-			<a href="/">
-				<p class="text-sky-100 text-2xl">Docker Home</p>
-			</a>
-		</div>
-		<div class="flex w-full">
-			<input type="text" placeholder="Search... [s]" class="w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"/>
-		</div>
-		<div class="flex justify-end w-1/4 space-x-2"></div>
-	</div>
 }
 
 templ head() {
@@ -51,4 +44,33 @@ templ head() {
 		<!-- htmx -->
 		<script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
 	</head>
+}
+
+templ header() {
+	<header class="grid grid-cols-4 gap-2 items-center justify-between w-screen px-4 py-4 bg-sky-600">
+		<div class="sm:col-span-1 col-span-3 flex justify-start">
+			<a href="/">
+				<p class="text-sky-200 text-2xl">Docker Home</p>
+			</a>
+		</div>
+		<div class="sm:col-span-2 sm:row-auto col-span-4 row-start-2 span-2 justify-center">
+			<input type="text" placeholder="Search... [s]" class="w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"/>
+		</div>
+		<div class="flex justify-end space-x-2 text-sky-200">
+			<a href="https://github.com/pkdevel/docker-home" target="_blank">
+				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59c.4.07.55-.17.55-.38c0-.19-.01-.82-.01-1.49c-2.01.37-2.53-.49-2.69-.94c-.09-.23-.48-.94-.82-1.13c-.28-.15-.68-.52-.01-.53c.63-.01 1.08.58 1.23.82c.72 1.21 1.87.87 2.33.66c.07-.52.28-.87.51-1.07c-1.78-.2-3.64-.89-3.64-3.95c0-.87.31-1.59.82-2.15c-.08-.2-.36-1.02.08-2.12c0 0 .67-.21 2.2.82c.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82c.44 1.1.16 1.92.08 2.12c.51.56.82 1.27.82 2.15c0 3.07-1.87 3.75-3.65 3.95c.29.25.54.73.54 1.48c0 1.07-.01 1.93-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"></path></svg>
+			</a>
+			<a href="#">
+				<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 16 16"><g fill="currentColor"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492a3.246 3.246 0 0 0 0-6.492M5.754 8a2.246 2.246 0 1 1 4.492 0a2.246 2.246 0 0 1-4.492 0"></path><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115z"></path></g></svg>
+			</a>
+		</div>
+	</header>
+}
+
+templ footer() {
+	<footer class="flex items-start justify-between w-screen px-4 py-3 bg-sky-600">
+		<p class="text-xs text-gray-200">
+			made with ❤ and 🥦 by <a href="https://github.com/pkdevel" target="_blank">pkdevel</a>
+		</p>
+	</footer>
 }
