@@ -1,25 +1,39 @@
 package pages
 
 templ Index() {
+	@page() {
+		<body class="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
+			@header()
+			<div class="flex items-top justify-evenly w-screen h-screen px-2 py-10">
+				<div class="flex flex-col max-w-px items-start"></div>
+				<div class="flex flex-col w-screen items-center">
+					<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
+				</div>
+				<div class="flex flex-col max-w-px items-end"></div>
+			</div>
+		</body>
+	}
+}
+
+templ page() {
 	<!DOCTYPE html>
 	<html>
 		@head()
-		<body class="bg-gray-300 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
-			@header()
-			<div id="content" class="flex items-center justify-center w-screen h-screen p-10 space-x-6">
-				<div class="max-w-sm mx-auto">
-					<div>
-						<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
-					</div>
-				</div>
-			</div>
-		</body>
+		{ children... }
 	</html>
 }
 
 templ header() {
-	<div id="header" class="flex items-center justify-center w-screen p-6 bg-sky-600">
-		<p class="text-sky-100 text-2xl">Docker Home</p>
+	<div id="header" class="flex items-center justify-between w-screen px-2 py-4 bg-sky-600">
+		<div class="flex justify-start w-1/4">
+			<a href="/">
+				<p class="text-sky-100 text-2xl">Docker Home</p>
+			</a>
+		</div>
+		<div class="flex w-full">
+			<input type="text" placeholder="Search... [s]" class="w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"/>
+		</div>
+		<div class="flex justify-end w-1/4 space-x-2"></div>
 	</div>
 }
 
