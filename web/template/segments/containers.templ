@@ -6,17 +6,26 @@ type ContainerApp interface {
 }
 
 templ List(containers []ContainerApp) {
-	<ul class="list-inside list-disc">
+	<div class="grid grid-cols-1 gap-4 px-4 py-4">
 		for _, container := range containers {
-			<li>
-				@href(container.Name(), container.URL())
-			</li>
+			@href(container.URL()) {
+				<div class="flex items-center justify-between">
+					<div class="flex-1 min-w-0 bg-sky-200 dark:bg-sky-900 rounded-lg px-4 py-2">
+						<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+							{ container.Name() }
+						</p>
+						<p class="text-sm truncate text-gray-500 dark:text-gray-400">
+							{ container.URL() }
+						</p>
+					</div>
+				</div>
+			}
 		}
-	</ul>
+	</div>
 }
 
-templ href(name string, url string) {
+templ href(url string) {
 	<a href={ templ.SafeURL(url) } target="_blank">
-		{ name }
+		{ children... }
 	</a>
 }
