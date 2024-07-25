@@ -42,20 +42,25 @@ clean:
 	@rm -rf data build main
 
 watch:
-	make -j3 templ-watch tailwind-watch go-watch
+	@make -j4 templ-watch go-watch tailwind-watch tailwind-notify
 
 go-watch: _air
-	air
+	@air --proxy.proxy_port "8181"
 
 templ-watch: _templ
-	templ generate -watch
+	@templ generate --watch \
+		--proxy="http://localhost:8181" \
+		--proxyport="6969" \
+		--open-browser=false
 
 tailwind-watch: _tailwind
-	tailwindcss -mw \
+	@tailwindcss --watch --minify \
 		-c web/tailwind.config.js \
 		-i web/style/tailwind.css \
 		-o assets/style.css
 
+tailwind-notify:
+	@sleep 1; air -c ".air.notify.toml"
 
 _air:
 	@if ! command -v air &> /dev/null; then \

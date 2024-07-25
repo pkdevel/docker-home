@@ -1,0 +1,15 @@
+root = "assets"
+tmp_dir = "build"
+
+[build]
+full_bin = "true"
+cmd = "templ generate -v --notify-proxy --proxyport=6969"
+delay = 100
+exclude_unchanged = true
+include_ext = ["css", "js"]
+
+[log]
+main_only = true
+
+[misc]
+clean_on_exit = true
