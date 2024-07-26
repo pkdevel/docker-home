@@ -9,15 +9,13 @@ templ List(containers []ContainerApp) {
 	<div class="grid grid-cols-1 gap-4 px-4 py-4">
 		for _, container := range containers {
 			@href(container.URL()) {
-				<div class="flex items-center justify-between">
-					<div class="flex-1 min-w-0 bg-sky-200 dark:bg-sky-900 rounded-lg px-4 py-2">
-						<p class="text-sm font-medium text-gray-900 truncate dark:text-white">
-							{ container.Name() }
-						</p>
-						<p class="text-sm truncate text-gray-500 dark:text-gray-400">
-							{ container.URL() }
-						</p>
-					</div>
+				<div class="flex-1 min-w-0 bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 border-2 border-transparent hover:border-inherit">
+					<p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
+						{ container.Name() }
+					</p>
+					<p class="text-sm truncate text-gray-500 dark:text-gray-400">
+						{ container.URL() }
+					</p>
 				</div>
 			}
 		}
