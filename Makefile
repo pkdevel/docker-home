@@ -29,7 +29,7 @@ build: generate
 	@go build -v ./cmd/main.go
 
 run: generate
-	@echo "[GO] Starting"1
+	@echo "[GO] Starting"
 	@go run ./cmd/main.go
 
 clean:

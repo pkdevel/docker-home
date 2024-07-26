@@ -4,7 +4,7 @@ tmp_dir = "build"
 [build]
 full_bin = "true"
 cmd = "templ generate -v --notify-proxy --proxyport=6969"
-delay = 100
+delay = 0
 exclude_unchanged = true
 include_ext = ["css", "js"]
 

@@ -4,7 +4,7 @@ tmp_dir = "build"
 [build]
 bin = "./build/docker-home"
 cmd = "go build -o ./build/docker-home ./cmd/main.go"
-delay = 1000
+delay = 100
 exclude_dir = ["assets", "data", "build", "vendor", "testdata"]
 exclude_regex = ["_test\\.go"]
 exclude_unchanged = true
