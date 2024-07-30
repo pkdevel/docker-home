@@ -3,6 +3,7 @@ package persistence
 import (
 	"io/fs"
 	"log"
+	"log/slog"
 	"os"
 	"time"
 
@@ -26,7 +27,7 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	log.Println("Opening database")
+	slog.Info("Opening database")
 	instance, err = bolt.Open("data/bolt.db", fs.ModePerm, &bolt.Options{Timeout: 5 * time.Second})
 	if err != nil {
 		log.Fatal(err)

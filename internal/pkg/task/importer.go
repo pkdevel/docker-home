@@ -1,7 +1,7 @@
 package task
 
 import (
-	"log"
+	"log/slog"
 	"time"
 
 	"github.com/pkdevel/docker-home/internal/pkg/docker"
@@ -9,7 +9,7 @@ import (
 )
 
 func StartImporter() {
-	log.Println("Starting importer")
+	slog.Info("Starting importer")
 
 	ticker := time.NewTicker(60 * time.Second)
 	go func() {
@@ -28,14 +28,16 @@ func StartImporter() {
 
 func importContainers(docker *docker.DockerClient, containers model.Containers) {
 	for _, container := range docker.List() {
-		containers.Save(model.Container{
-			ID: container.Name,
-			Data: model.ContainerData{
-				Name:        container.Name,
-				Port:        container.Port,
-				PrivatePort: container.PrivatePort,
-			},
-		})
-		log.Printf("Importing %s (%s)", container.Name, container.ID)
+		go func() {
+			containers.Save(model.Container{
+				ID: container.Name,
+				Data: model.ContainerData{
+					Name:        container.Name,
+					Port:        container.Port,
+					PrivatePort: container.PrivatePort,
+				},
+			})
+			slog.Debug("Imported", container.Name, container.ID[:7])
+		}()
 	}
 }

@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"log"
+	"log/slog"
 	"net/http"
 	"net/url"
 	"os"
@@ -16,7 +17,7 @@ import (
 
 func SetupAndServe() {
 	go func() {
-		log.Println("Setting up routes")
+		slog.Info("Setting up routes")
 
 		// pages
 		http.Handle("/", templ.Handler(pages.Index()))
@@ -26,7 +27,7 @@ func SetupAndServe() {
 		http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
 			url, err := url.Parse(r.Referer())
 			if err != nil {
-				log.Panic(err)
+				slog.Error(err.Error())
 				http.Redirect(w, r, "/500", http.StatusFound)
 				return
 			}
@@ -55,7 +56,7 @@ func SetupAndServe() {
 		http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
 			_, err := os.Open("./assets/" + r.URL.Path[1:])
 			if err != nil {
-				log.Print(err)
+				slog.Error(err.Error())
 				http.Redirect(w, r, "/404", http.StatusFound)
 				return
 			}
@@ -72,7 +73,7 @@ func SetupAndServe() {
 			pages.Error().Render(r.Context(), w)
 		})
 
-		log.Println("Starting server")
+		slog.Info("Starting server")
 		if err := http.ListenAndServe(":8080", nil); err != nil {
 			log.Fatal(err)
 		}

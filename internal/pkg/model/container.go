@@ -2,7 +2,8 @@ package model
 
 import (
 	"encoding/json"
-	"log"
+	"log/slog"
+	"strings"
 	"time"
 
 	"github.com/pkdevel/docker-home/internal/pkg/persistence"
@@ -29,7 +30,7 @@ type ContainerData struct {
 func (c *Containers) Find(query string) []Container {
 	result, err := c.find(query)
 	if err != nil {
-		log.Panic(err)
+		slog.Error(err.Error())
 	}
 	return result
 }
@@ -62,7 +63,7 @@ func (c *Containers) find(query string) ([]Container, error) {
 
 func (c *Containers) Save(item Container) {
 	if err := c.save(item); err != nil {
-		log.Panic(err)
+		slog.Error(err.Error())
 	}
 }
 
