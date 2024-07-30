@@ -31,7 +31,10 @@ func SetupAndServe() {
 				return
 			}
 			hostname := strings.Split(url.Host, ":")[0]
-			containers := containers.Find()
+
+			r.ParseForm()
+			query := r.Form.Get("search")
+			containers := containers.Find(query)
 			apps := []segments.ContainerApp{}
 			for _, container := range containers {
 				scheme := "http"

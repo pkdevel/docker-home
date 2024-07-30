@@ -26,15 +26,15 @@ type ContainerData struct {
 	PrivatePort uint16 `json:"private_port"`
 }
 
-func (c *Containers) Find() []Container {
-	result, err := c.find()
+func (c *Containers) Find(query string) []Container {
+	result, err := c.find(query)
 	if err != nil {
 		log.Panic(err)
 	}
 	return result
 }
 
-func (c *Containers) find() ([]Container, error) {
+func (c *Containers) find(query string) ([]Container, error) {
 	tx, err := c.db.Begin(false)
 	if err != nil {
 		return nil, err
@@ -43,6 +43,12 @@ func (c *Containers) find() ([]Container, error) {
 
 	var result []Container
 	err = tx.Bucket([]byte("containers")).ForEach(func(k, v []byte) error {
+		if query != "" {
+			if !strings.Contains(strings.ToLower(string(k)), strings.ToLower(query)) {
+				return nil
+			}
+		}
+
 		var container Container
 		err := json.Unmarshal(v, &container)
 		if err == nil {

@@ -4,14 +4,20 @@ templ Index() {
 	@page() {
 		<div class="flex flex-col justify-evenly h-screen">
 			@header()
-			<main class="flex flex-row items-top justify-evenly py-10 overflow-auto">
-				<div class="flex flex-col max-w-px items-start">
+			<div class="flex justify-evenly z-10 max-h-0 overflow-visible">
+				<span class="flex items-center htmx-indicator my-2 h-4">
+					<img class="pr-2" src="/bars.svg"/>
+					<p>Searching...</p>
+				</span>
+			</div>
+			<main class="flex items-top justify-evenly overflow-auto h-full">
+				<div class="flex flex-col max-w-0 items-start">
 					&nbsp;
 				</div>
 				<div class="flex flex-col items-center w-full">
-					<div hx-get="/list" hx-trigger="load" hx-swap="outerHTML"></div>
+					<div id="list" hx-get="/list" hx-trigger="load" hx-swap="innerHTML"></div>
 				</div>
-				<div class="flex flex-col max-w-px items-end">
+				<div class="flex flex-col max-w-0 items-end">
 					&nbsp;
 				</div>
 			</main>
@@ -54,7 +60,16 @@ templ header() {
 			</a>
 		</div>
 		<div class="sm:col-span-2 sm:row-auto col-span-4 row-start-2 span-2 justify-center">
-			<input type="text" placeholder="Search... [s]" class="w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"/>
+			<input
+				type="search"
+				name="search"
+				placeholder="Search... [s]"
+				hx-post="/list"
+				hx-trigger="keyup changed delay:500ms, search"
+				hx-target="#list"
+				hx-indicator=".htmx-indicator"
+				class="form-control w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
+			/>
 		</div>
 		<div class="flex justify-end space-x-2 text-sky-200">
 			<a href="https://github.com/pkdevel/docker-home" target="_blank">
