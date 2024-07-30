@@ -20,7 +20,7 @@ func SetupAndServe() {
 		slog.Info("Setting up routes")
 
 		// pages
-		http.Handle("/", templ.Handler(pages.Index()))
+		http.Handle("/{$}", templ.Handler(pages.Index()))
 
 		// segments
 		containers := model.GetContainers()
