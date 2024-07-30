@@ -18,6 +18,7 @@ type DockerClient struct {
 
 func NewDockerClient() *DockerClient {
 	api, err := client.NewClientWithOpts(
+		client.FromEnv,
 		client.WithAPIVersionNegotiation(),
 	)
 	if err != nil {
