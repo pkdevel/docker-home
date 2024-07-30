@@ -10,6 +10,10 @@
     @apply bg-sky-600;
   }
   header, main, footer {
-    @apply w-full px-4 py-4;
+    @apply px-4 py-2;
+  }
+
+  .selectable {
+    @apply border-2 border-transparent hover:border-inherit;
   }
 }
