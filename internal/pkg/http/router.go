@@ -54,13 +54,14 @@ func SetupAndServe() {
 
 		// assets
 		http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
-			_, err := os.Open("./assets/" + r.URL.Path[1:])
+			filename := fmt.Sprintf("./assets/%s", r.PathValue("file"))
+			_, err := os.Open(filename)
 			if err != nil {
 				slog.Error(err.Error())
 				http.Redirect(w, r, "/404", http.StatusFound)
 				return
 			}
-			http.ServeFile(w, r, "./assets/"+r.URL.Path[1:])
+			http.ServeFile(w, r, filename)
 		})
 
 		// errors
