@@ -1,7 +1,7 @@
 package pages
 
 templ Index() {
-	@page() {
+	@html() {
 		<div class="flex flex-col justify-evenly h-screen">
 			@header()
 			<div class="flex justify-evenly z-10 max-h-0 overflow-visible">
@@ -25,14 +25,15 @@ templ Index() {
 	}
 }
 
-templ page() {
+templ html() {
 	<!DOCTYPE html>
 	<html>
 		@head()
 		<body class="h-screen">
 			{ children... }
 		</body>
-		<script src="/dark-mode-toggle.js"></script>
+		<script src="dark-mode-toggle.js"></script>
+		<script src="keybinds.js"></script>
 	</html>
 }
 
@@ -40,14 +41,11 @@ templ head() {
 	<head>
 		<meta charset="UTF-8"/>
 		<title>Docker Home</title>
-		<!-- style -->
 		<link href="style.css" rel="stylesheet"/>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<!-- favicon -->
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"/>
 		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"/>
 		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"/>
-		<!-- htmx -->
 		<script src="https://unpkg.com/htmx.org@2.0.1" integrity="sha384-QWGpdj554B4ETpJJC9z+ZHJcA/i59TyjxEPXiiUgN2WmTyV5OEZWCD6gQhgkdpB/" crossorigin="anonymous"></script>
 	</head>
 }
@@ -61,13 +59,14 @@ templ header() {
 		</div>
 		<div class="sm:col-span-2 sm:row-auto col-span-4 row-start-2 span-2 justify-center">
 			<input
+				id="search"
 				type="search"
 				name="search"
-				placeholder="Search... [s]"
+				placeholder="Search... [/]"
 				hx-post="/list"
-				hx-trigger="keyup changed delay:500ms, search"
 				hx-target="#list"
 				hx-indicator=".htmx-indicator"
+				hx-trigger="keyup changed delay:500ms, search"
 				class="form-control w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
 			/>
 		</div>
