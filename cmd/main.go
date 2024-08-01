@@ -14,7 +14,5 @@ func main() {
 	persistence.Init()
 	defer persistence.Close()
 	task.StartImporter()
-	go router.SetupAndServe()
-
-	select {}
+	router.SetupAndServe()
 }
