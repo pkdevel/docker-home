@@ -39,27 +39,26 @@ func (c *DockerClient) List() []ContainerApp {
 		slog.Error(err.Error())
 		return result
 	}
-	slog.Debug(fmt.Sprintf("Found %d running container(s)", len(containers)))
+	slog.Debug(fmt.Sprintf("Found %d container(s)", len(containers)))
 
 	for _, ctr := range containers {
-		if len(ctr.Ports) == 0 {
-			slog.Debug("No open ports", "container", name(ctr))
-			continue
-		}
-
-		if ctr.Ports[0].Type != "tcp" {
-			slog.Debug("No tcp port", "container", name(ctr))
-			continue
-		}
-		if ctr.Ports[0].PublicPort == 0 {
-			continue
-		}
-
 		app := ContainerApp{
 			ctr.ID,
 			name(ctr),
-			ctr.Ports[0].PublicPort,
-			ctr.Ports[0].PrivatePort,
+			c.api.DaemonHost(),
+			[]ContainerPort{},
+		}
+
+		for _, port := range ctr.Ports {
+			if port.PublicPort == 0 {
+				continue
+			}
+
+			app.Ports = append(app.Ports, ContainerPort{
+				port.Type,
+				port.PublicPort,
+				port.PrivatePort,
+			})
 		}
 		result = append(result, app)
 	}
@@ -71,8 +70,14 @@ func name(ctr types.Container) string {
 }
 
 type ContainerApp struct {
-	ID          string
-	Name        string
+	ID    string
+	Name  string
+	Host  string
+	Ports []ContainerPort
+}
+
+type ContainerPort struct {
+	Type        string
 	Port        uint16
 	PrivatePort uint16
 }

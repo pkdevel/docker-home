@@ -5,9 +5,7 @@ import (
 	"log"
 	"log/slog"
 	"net/http"
-	"net/url"
 	"os"
-	"strings"
 
 	"github.com/a-h/templ"
 	"github.com/pkdevel/docker-home/internal/pkg/model"
@@ -16,69 +14,53 @@ import (
 )
 
 func SetupAndServe() {
-	go func() {
-		slog.Info("Setting up routes")
+	slog.Info("Setting up routes")
 
-		// pages
-		http.Handle("/{$}", templ.Handler(pages.Index()))
+	// pages
+	http.Handle("/{$}", templ.Handler(pages.Index()))
 
-		// segments
-		containers := model.GetContainers()
-		http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
-			url, err := url.Parse(r.Referer())
-			if err != nil {
-				slog.Error(err.Error())
-				http.Redirect(w, r, "/500", http.StatusFound)
-				return
+	// segments
+	endpoints := model.GetEndpoints()
+	http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
+		query := r.FormValue("dhcq-search")
+		apps := []segments.ContainerApp{}
+		for _, endpoint := range endpoints.Find(query) {
+			if len(endpoint.Links) == 0 {
+				continue
 			}
-			hostname := strings.Split(url.Host, ":")[0]
-
-			r.ParseForm()
-			query := r.Form.Get("search")
-			containers := containers.Find(query)
-			apps := []segments.ContainerApp{}
-			for _, container := range containers {
-				scheme := "http"
-				if container.Data.PrivatePort == 443 {
-					scheme += "s"
-				}
-
-				apps = append(apps, ContainerApp{
-					container.Data.Name,
-					fmt.Sprintf("%s://%s:%d", scheme, hostname, container.Data.Port),
-				})
+			for _, link := range endpoint.Links {
+				apps = append(apps, &ContainerApp{endpoint.ID, link})
 			}
-
-			segments.List(apps).Render(r.Context(), w)
-		})
-
-		// assets
-		http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
-			filename := fmt.Sprintf("./assets/%s", r.PathValue("file"))
-			_, err := os.Open(filename)
-			if err != nil {
-				slog.Error(err.Error())
-				http.Redirect(w, r, "/404", http.StatusFound)
-				return
-			}
-			http.ServeFile(w, r, filename)
-		})
-
-		// errors
-		http.HandleFunc("/404", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusNotFound)
-			pages.NotFound().Render(r.Context(), w)
-		})
-		http.HandleFunc("/500", func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusInternalServerError)
-			pages.Error().Render(r.Context(), w)
-		})
-
-		slog.Info("Starting server")
-		if err := http.ListenAndServe(":8080", nil); err != nil {
-			log.Fatal(err)
 		}
-	}()
+		segments.List(apps).Render(r.Context(), w)
+	})
+
+	// assets
+	http.HandleFunc("/{file}", func(w http.ResponseWriter, r *http.Request) {
+		filename := fmt.Sprintf("./assets/%s", r.PathValue("file"))
+		_, err := os.Open(filename)
+		if err != nil {
+			slog.Error(err.Error())
+			http.Redirect(w, r, "/404", http.StatusFound)
+			return
+		}
+		http.ServeFile(w, r, filename)
+	})
+
+	// errors
+	http.HandleFunc("/404", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+		pages.NotFound().Render(r.Context(), w)
+	})
+	http.HandleFunc("/500", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error().Render(r.Context(), w)
+	})
+
+	slog.Info("Starting server")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatal(err)
+	}
 }
 
 type ContainerApp struct {

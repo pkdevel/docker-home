@@ -12,7 +12,9 @@ func main() {
 	slog.SetLogLoggerLevel(slog.LevelDebug)
 
 	persistence.Init()
-	router.SetupAndServe()
+	defer persistence.Close()
 	task.StartImporter()
+	go router.SetupAndServe()
+
 	select {}
 }

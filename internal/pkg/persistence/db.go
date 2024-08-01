@@ -17,7 +17,7 @@ const (
 
 var instance *bolt.DB
 
-func Database() *bolt.DB {
+func database() *bolt.DB {
 	Init()
 	return instance
 }

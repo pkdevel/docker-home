@@ -1,43 +1,98 @@
 package task
 
 import (
+	"fmt"
 	"log/slog"
+	"net/url"
 	"time"
 
 	"github.com/pkdevel/docker-home/internal/pkg/docker"
 	"github.com/pkdevel/docker-home/internal/pkg/model"
 )
 
-func StartImporter() {
-	slog.Info("Starting importer")
+const interval = time.Second * 60
 
-	ticker := time.NewTicker(60 * time.Second)
-	go func() {
-		containers := model.GetContainers()
-		defer containers.Close()
-
-		docker := docker.NewDockerClient()
-		defer docker.Close()
-
-		importContainers(docker, containers)
-		for range ticker.C {
-			importContainers(docker, containers)
-		}
-	}()
+type importer struct {
+	docker     *docker.DockerClient
+	containers *model.Containers
+	endpoints  *model.Endpoints
 }
 
-func importContainers(docker *docker.DockerClient, containers model.Containers) {
-	for _, container := range docker.List() {
-		go func() {
-			containers.Save(model.Container{
-				ID: container.Name,
-				Data: model.ContainerData{
-					Name:        container.Name,
-					Port:        container.Port,
-					PrivatePort: container.PrivatePort,
-				},
-			})
-			slog.Debug("Imported", container.Name, container.ID[:7])
-		}()
+func StartImporter() {
+	slog.Info("Starting importer", "interval", interval)
+
+	docker := docker.NewDockerClient()
+	defer docker.Close()
+
+	i := importer{
+		docker:     docker,
+		containers: model.GetContainers(),
+		endpoints:  model.GetEndpoints(),
 	}
+
+	i.fetchAndSafe()
+	go i.run()
+}
+
+func (i *importer) run() {
+	ticker := time.NewTicker(interval)
+	for range ticker.C {
+		i.fetchAndSafe()
+	}
+}
+
+func (i *importer) fetchAndSafe() {
+	for _, container := range i.docker.List() {
+		data := []model.ContainerData{}
+		hostname := hostname(container.Host)
+		links := []string{}
+		for _, port := range container.Ports {
+			if link := generateLink(hostname, port); link != nil {
+				links = append(links, *link)
+			}
+			data = append(data, model.ContainerData{
+				Name:        container.Name,
+				Port:        port.Port,
+				PrivatePort: port.PrivatePort,
+			})
+		}
+		i.containers.Save(&model.Container{ID: container.Name, Data: data})
+		if len(links) > 0 {
+			i.endpoints.Save(&model.Endpoint{ID: container.Name, Links: links})
+		}
+		slog.Debug("Imported", "container", container.Name, "id", container.ID[:7], "links", links)
+	}
+}
+
+func hostname(uri string) string {
+	host, err := url.Parse(uri)
+	if err != nil {
+		return ""
+	}
+	return host.Hostname()
+}
+
+func generateLink(host string, port docker.ContainerPort) *string {
+	if len(host) == 0 {
+		return nil
+	}
+	if port.Type != "tcp" {
+		return nil
+	}
+	if port.Port == 0 {
+		return nil
+	}
+	if port.PrivatePort < 1024 && port.PrivatePort != 80 && port.PrivatePort != 443 {
+		return nil
+	}
+
+	// test port for http and encryption
+	// test for host network
+
+	scheme := "http"
+	if port.PrivatePort == 443 {
+		scheme += "s"
+	}
+	result := fmt.Sprintf("%s://%s:%d", scheme, host, port.Port)
+	return &result
 }
