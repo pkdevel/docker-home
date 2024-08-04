@@ -22,7 +22,7 @@ generate: _templ _tailwind
 	@echo "[TEMPL] Generating templates"
 	@templ generate
 	@echo "[TAILWIND] Generating styles"
-	@tailwindcss -c web/tailwind.config.js -i web/style/tailwind.css -o assets/style.css -m
+	@npx --no -- tailwindcss -c web/tailwind.config.js -i web/template/tailwind.css -o assets/style.css -m
 
 build: generate
 	@echo "[GO] Building"
@@ -54,9 +54,9 @@ templ-watch: _templ
 		--open-browser=false
 
 tailwind-watch: _tailwind
-	@tailwindcss --watch --minify \
+	@npx --no -- tailwindcss --watch --minify \
 		-c web/tailwind.config.js \
-		-i web/style/tailwind.css \
+		-i web/template/tailwind.css \
 		-o assets/style.css
 
 tailwind-notify:
@@ -75,7 +75,7 @@ _templ:
 	fi
 
 _tailwind:
-	@if ! command -v tailwindcss &> /dev/null; then \
-		echo "tailwind-cli not found, please install..."; \
-		exit 1; \
+	@if ! npm list tailwindcss &> /dev/null ; then \
+		echo "[NPM] Installing tailwindcss"; \
+		npm install; \
 	fi

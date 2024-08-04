@@ -7,10 +7,7 @@
     @apply bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200;
   }
   header, footer {
-    @apply bg-sky-600;
-  }
-  header, main, footer {
-    @apply px-4 py-2;
+    @apply bg-sky-600 px-4 py-2;
   }
 
   .selectable {

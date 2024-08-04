@@ -4,3 +4,4 @@ assets/style.css
 web/template/**/*_templ.*[go,txt]
 build/
 data/
+node_modules/

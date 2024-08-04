@@ -12,7 +12,7 @@ FROM d3fk/tailwindcss:latest AS tailwindcss
 COPY ./assets/. /app/assets
 COPY ./web/. /app/web
 WORKDIR /app
-RUN ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/style/tailwind.css", "-o", "assets/style.css", "-m"]
+RUN ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/template/tailwind.css", "-o", "assets/style.css", "-m"]
 
 FROM fetcher AS builder
 COPY ./. /app
