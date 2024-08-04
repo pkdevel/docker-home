@@ -56,11 +56,19 @@ func (i *importer) fetchAndSafe() {
 				PrivatePort: port.PrivatePort,
 			})
 		}
-		i.containers.Save(&model.Container{ID: container.Name, Data: data})
-		if len(links) > 0 {
-			i.endpoints.Save(&model.Endpoint{ID: container.Name, Links: links})
+		slog.Debug("Importing", "container", container.Name, "id", container.ID[:7], "links", links)
+
+		err := i.containers.Save(&model.Container{ID: container.Name, Data: data})
+		if err != nil {
+			slog.Error(err.Error())
+			continue
 		}
-		slog.Debug("Imported", "container", container.Name, "id", container.ID[:7], "links", links)
+		if len(links) > 0 {
+			err = i.endpoints.Save(&model.Endpoint{ID: container.Name, Links: links})
+			if err != nil {
+				slog.Error(err.Error())
+			}
+		}
 	}
 }
 

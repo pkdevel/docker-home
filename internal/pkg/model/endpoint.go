@@ -1,7 +1,6 @@
 package model
 
 import (
-	"log/slog"
 	"time"
 
 	"github.com/pkdevel/docker-home/internal/pkg/persistence"
@@ -20,10 +19,8 @@ func (e *Endpoints) Find(query string) []*Endpoint {
 	return e.dao.Find(query)
 }
 
-func (e *Endpoints) Save(item *Endpoint) {
-	if err := e.dao.Save(item); err != nil {
-		slog.Error(err.Error())
-	}
+func (e *Endpoints) Save(item *Endpoint) error {
+	return e.dao.Save(item)
 }
 
 type Endpoints struct {

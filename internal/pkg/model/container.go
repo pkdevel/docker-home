@@ -1,7 +1,6 @@
 package model
 
 import (
-	"log/slog"
 	"time"
 
 	"github.com/pkdevel/docker-home/internal/pkg/persistence"
@@ -20,10 +19,8 @@ func (c *Containers) Find(query string) []*Container {
 	return c.dao.Find(query)
 }
 
-func (c *Containers) Save(item *Container) {
-	if err := c.dao.Save(item); err != nil {
-		slog.Error(err.Error())
-	}
+func (c *Containers) Save(item *Container) error {
+	return c.dao.Save(item)
 }
 
 type Containers struct {
