@@ -1,20 +1,20 @@
 package segments
 
-type ContainerApp interface {
-	Name() string
-	URL() string
+type ContainerApp struct {
+	Name string
+	URL  string
 }
 
-templ List(containers []ContainerApp) {
-	<div class="grid grid-cols-1 gap-4 px-4 py-4">
+templ Containers(containers []*ContainerApp) {
+	<div class="grid grid-cols-1 gap-5">
 		for _, container := range containers {
-			@href(container.URL()) {
+			@href(container.URL) {
 				<div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
 					<p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-						{ container.Name() }
+						{ container.Name }
 					</p>
 					<p class="text-sm truncate text-gray-500 dark:text-gray-400">
-						{ container.URL() }
+						{ container.URL }
 					</p>
 				</div>
 			}

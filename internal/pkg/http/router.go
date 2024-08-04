@@ -21,18 +21,21 @@ func SetupAndServe() {
 
 	// segments
 	endpoints := model.GetEndpoints()
-	http.HandleFunc("/list", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/containers", func(w http.ResponseWriter, r *http.Request) {
 		query := r.FormValue("dhcq-search")
-		apps := []segments.ContainerApp{}
+		apps := []*segments.ContainerApp{}
 		for _, endpoint := range endpoints.Find(query) {
 			if len(endpoint.Links) == 0 {
 				continue
 			}
 			for _, link := range endpoint.Links {
-				apps = append(apps, &ContainerApp{endpoint.ID, link})
+				apps = append(apps, &segments.ContainerApp{
+					Name: endpoint.ID,
+					URL:  link,
+				})
 			}
 		}
-		segments.List(apps).Render(r.Context(), w)
+		segments.Containers(apps).Render(r.Context(), w)
 	})
 
 	// assets
@@ -61,17 +64,4 @@ func SetupAndServe() {
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
-}
-
-type ContainerApp struct {
-	name string
-	url  string
-}
-
-func (c ContainerApp) Name() string {
-	return c.name
-}
-
-func (c ContainerApp) URL() string {
-	return c.url
 }

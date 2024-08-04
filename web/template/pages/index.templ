@@ -9,12 +9,12 @@ templ Index() {
 					<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><circle cx="18" cy="12" r="0" fill="currentColor"><animate attributeName="r" begin=".67" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"></animate></circle><circle cx="12" cy="12" r="0" fill="currentColor"><animate attributeName="r" begin=".33" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"></animate></circle><circle cx="6" cy="12" r="0" fill="currentColor"><animate attributeName="r" begin="0" calcMode="spline" dur="1.5s" keySplines="0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8;0.2 0.2 0.4 0.8" repeatCount="indefinite" values="0;2;0;0"></animate></circle></svg>
 				</span>
 			</div>
-			<main class="flex items-top justify-evenly overflow-auto h-full">
+			<main class="flex items-top justify-evenly overflow-auto py-6 h-full">
 				<div class="flex flex-col max-w-0 items-start">
 					&nbsp;
 				</div>
 				<div class="flex flex-col items-center w-full">
-					<div id="list" hx-get="/list" hx-trigger="load" hx-swap="innerHTML"></div>
+					<div id="containers" hx-get="/containers" hx-trigger="load"></div>
 				</div>
 				<div class="flex flex-col max-w-0 items-end">
 					&nbsp;
@@ -63,8 +63,8 @@ templ header() {
 				type="search"
 				name="dhcq-search"
 				placeholder="Search... [/]"
-				hx-post="/list"
-				hx-target="#list"
+				hx-post="/containers"
+				hx-target="#containers"
 				hx-indicator=".htmx-indicator"
 				hx-trigger="keyup changed delay:500ms, search"
 				class="form-control w-full px-4 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:outline-none focus:ring-primary-500 focus:border-primary-500"
