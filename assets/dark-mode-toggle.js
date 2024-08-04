@@ -1,37 +1,42 @@
-const lightSwitches = document.querySelectorAll('.light-switch');
-if (lightSwitches.length > 0) {
-  var dm = localStorage.getItem('dark-mode');
-  lightSwitches.forEach((lightSwitch, i) => {
-    if (dm === 'true' || (!dm && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+const ls = document.querySelectorAll('.light-switch');
+const cfg_dm = localStorage.getItem('dark-mode');
+const wm = window.matchMedia('(prefers-color-scheme: dark)');
+const is_dark = cfg_dm === 'true' || (!cfg_dm && wm.matches);
+const r = document.documentElement.classList;
+if (is_dark) {
+  r.add('dark');
+} else {
+  r.remove('dark');
+}
+if (ls.length > 0) {
+  ls.forEach((lightSwitch, i) => {
+    if (is_dark) {
       lightSwitch.checked = true;
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
     }
     lightSwitch.addEventListener('change', () => {
       const { checked } = lightSwitch;
-      lightSwitches.forEach((el, n) => {
+      ls.forEach((el, n) => {
         if (n !== i) {
           el.checked = checked;
         }
       });
       if (lightSwitch.checked) {
-        document.documentElement.classList.add('dark');
+        r.add('dark');
         localStorage.setItem('dark-mode', true);
       } else {
-        document.documentElement.classList.remove('dark');
+        r.remove('dark');
         localStorage.setItem('dark-mode', false);
       }
     });
   });
 }
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+wm.addEventListener('change', (e) => {
   if (localStorage.getItem('dark-mode')) {
     return;
   }
   if (e.matches) {
-    document.documentElement.classList.add('dark');
+    r.add('dark');
   } else {
-    document.documentElement.classList.remove('dark');
+    r.remove('dark');
   }
 });
