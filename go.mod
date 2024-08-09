@@ -4,7 +4,7 @@ go 1.22.5
 
 require (
 	github.com/a-h/templ v0.2.747
-	github.com/docker/docker v27.1.0+incompatible
+	github.com/docker/docker v27.1.1+incompatible
 	go.etcd.io/bbolt v1.3.10
 )
 
