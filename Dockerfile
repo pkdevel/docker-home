@@ -9,11 +9,10 @@ COPY --chown=65532:65532 ./web/. /app/web
 WORKDIR /app
 RUN ["templ", "generate"]
 
-FROM d3fk/tailwindcss:latest AS tailwindcss
-COPY ./assets/. /app/assets
-COPY ./web/. /app/web
+FROM d3fk/tailwindcss:v3 AS tailwindcss
 WORKDIR /app
-RUN ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/template/tailwind.css", "-o", "assets/style.css", "-m"]
+RUN --mount=type=bind,source=web,target=web \
+  ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/template/tailwind.css", "-o", "assets/style.css", "-m"]
 
 FROM fetcher AS builder
 COPY ./. /app
