@@ -20,7 +20,7 @@ COPY --from=templ /app/web/. /app/web
 WORKDIR /app
 RUN go build -v -o main ./cmd/main.go
 
-FROM alpine:3.20 AS assembler
+FROM alpine:3.21 AS assembler
 LABEL name="docker-home"
 LABEL description="A simple docker home page"
 EXPOSE 8080
