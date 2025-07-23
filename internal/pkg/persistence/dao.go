@@ -20,14 +20,14 @@ func NewDAO[T DataObject](bucket string) *DAO[T] {
 }
 
 func (dao *DAO[T]) Find(query string) []T {
+	result := []T{}
 	tx, err := dao.db.Begin(false)
 	if err != nil {
 		slog.Error(err.Error())
-		return nil
+		return result
 	}
 	defer tx.Rollback()
 
-	result := []T{}
 	err = tx.Bucket(dao.bucket).ForEach((func(k, v []byte) error {
 		if query != "" {
 			if !strings.Contains(strings.ToLower(string(k)), strings.ToLower(query)) {
