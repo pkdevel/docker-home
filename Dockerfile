@@ -1,7 +1,8 @@
-FROM golang:1.22-alpine3.20 AS fetcher
-COPY go.mod go.sum /app/
-WORKDIR /app
-RUN go mod download
+FROM --platform=$BUILDPLATFORM golang:1.24-alpine AS fetcher
+RUN --mount=type=cache,target=/go/pkg/mod \
+  --mount=type=bind,source=go.mod,target=go.mod \
+  --mount=type=bind,source=go.sum,target=go.sum \
+  go mod download -x
 
 FROM ghcr.io/a-h/templ:latest AS templ
 COPY --chown=65532:65532 ./web/. /app/web

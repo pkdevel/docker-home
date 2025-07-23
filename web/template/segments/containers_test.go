@@ -100,7 +100,7 @@ func TestList(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
 			component := Containers(test.args.values)
-			diff, err := htmldiff.DiffCtx(context.Background(), component, test.want)
+			_, diff, err := htmldiff.DiffCtx(context.Background(), component, test.want)
 			if err != nil {
 				t.Fatal(err)
 			}
