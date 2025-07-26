@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"log"
 	"log/slog"
-	"strings"
+	"net/url"
 
-	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/events"
 	"github.com/docker/docker/client"
 )
 
@@ -31,53 +31,24 @@ func (c *DockerClient) Close() {
 	c.api.Close()
 }
 
-func (c *DockerClient) List() []ContainerApp {
-	result := []ContainerApp{}
-
-	containers, err := c.api.ContainerList(context.Background(), container.ListOptions{All: true})
+func (c *DockerClient) Hostname() (string, error) {
+	host, err := url.Parse(c.api.DaemonHost())
 	if err != nil {
-		slog.Error(err.Error())
-		return result
+		return "", err
 	}
-	slog.Debug(fmt.Sprintf("Found %d container(s)", len(containers)))
+	return host.Hostname(), nil
+}
 
-	for _, ctr := range containers {
-		app := ContainerApp{
-			ctr.ID,
-			name(ctr),
-			c.api.DaemonHost(),
-			[]ContainerPort{},
-		}
+func (c *DockerClient) Events() (<-chan events.Message, <-chan error) {
+	return c.api.Events(context.Background(), events.ListOptions{})
+}
 
-		for _, port := range ctr.Ports {
-			if port.PublicPort == 0 {
-				continue
-			}
-
-			app.Ports = append(app.Ports, ContainerPort{
-				port.Type,
-				port.PublicPort,
-				port.PrivatePort,
-			})
-		}
-		result = append(result, app)
+func (c *DockerClient) ContainerList() []container.Summary {
+	result, err := c.api.ContainerList(context.Background(), container.ListOptions{All: true})
+	if err != nil {
+		slog.Error("unable to get containers", "error", err)
+	} else {
+		slog.Debug(fmt.Sprintf("found %d container(s)", len(result)))
 	}
 	return result
-}
-
-func name(ctr types.Container) string {
-	return strings.TrimPrefix(ctr.Names[0], "/")
-}
-
-type ContainerApp struct {
-	ID    string
-	Name  string
-	Host  string
-	Ports []ContainerPort
-}
-
-type ContainerPort struct {
-	Type        string
-	Port        uint16
-	PrivatePort uint16
 }

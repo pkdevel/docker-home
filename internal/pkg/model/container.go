@@ -28,19 +28,19 @@ type Containers struct {
 }
 
 type Container struct {
-	ID        string          `json:"id"`
+	Name      string          `json:"name"`
 	UpdatedAt time.Time       `json:"updated_at"`
 	Data      []ContainerData `json:"data"`
 }
 
 type ContainerData struct {
-	Name        string `json:"name"`
+	ID          string `json:"id"`
 	Port        uint16 `json:"port"`
 	PrivatePort uint16 `json:"private_port"`
 }
 
 func (c *Container) Identifier() []byte {
-	return []byte(c.ID)
+	return []byte(c.Name)
 }
 
 func (c *Container) UpdateTimestamp() {

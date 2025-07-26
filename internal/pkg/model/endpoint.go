@@ -31,6 +31,7 @@ type Endpoint struct {
 	ID        string    `json:"id"`
 	UpdatedAt time.Time `json:"updated_at"`
 	Links     []string  `json:"links"`
+	Icon      []byte    `json:"icon"`
 }
 
 func (e *Endpoint) Identifier() []byte {
