@@ -32,7 +32,7 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	slog.Info("Opening database")
+	slog.Info("opening database")
 	instance, err = bolt.Open("data/bolt.db", fs.ModePerm, &bolt.Options{Timeout: 5 * time.Second})
 	if err != nil {
 		log.Fatal(err)
@@ -55,38 +55,35 @@ func migrate(db *bolt.DB) {
 	}
 	defer tx.Rollback()
 
-	bucket, err := tx.CreateBucketIfNotExists([]byte("system"))
+	dbversion := 0
+	if system := tx.Bucket([]byte("system")); system != nil {
+		if version := system.Get([]byte("version")); version != nil {
+			dbversion, _ = strconv.Atoi(string(version))
+		}
+	}
+
+	if dbversion < 0 { // TODO: check for dev env
+		tx.ForEach(func(name []byte, b *bolt.Bucket) error {
+			if err := tx.DeleteBucket(name); err == nil {
+				slog.Info("dropped", "bucket", string(name))
+			}
+			return nil
+		})
+	}
+	if dbversion < version {
+		slog.Warn("TODO: migrating database")
+	}
+
+	system, err := tx.CreateBucketIfNotExists([]byte("system"))
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	dbversion := bucket.Get([]byte("version"))
-	if dbversion != nil {
-		current, err := strconv.Atoi(string(dbversion))
-		if err != nil {
-			log.Fatal(err)
-		}
-		if current < 0 { // TODO: check for dev env
-			drop(tx, "containers")
-			drop(tx, "endpoints")
-		}
-		if current < version {
-			slog.Info("TODO: Migrating database")
-		}
-	}
-
-	err = bucket.Put([]byte("version"), []byte(strconv.Itoa(version)))
+	err = system.Put([]byte("version"), []byte(strconv.Itoa(version)))
 	if err != nil {
 		log.Fatal(err)
 	}
 	err = tx.Commit()
 	if err != nil {
 		log.Fatal(err)
-	}
-}
-
-func drop(tx *bolt.Tx, bucket string) {
-	if err := tx.DeleteBucket([]byte(bucket)); err == nil {
-		slog.Info("Dropped", "bucket", bucket)
 	}
 }
