@@ -15,7 +15,7 @@ type DAO[T DataObject] struct {
 }
 
 func NewDAO[T DataObject](bucket string) *DAO[T] {
-	slog.Debug("New DAO with", "bucket", bucket, "type", reflect.TypeOf(new(T)))
+	slog.Debug("new DAO with", "bucket", bucket, "type", reflect.TypeOf(new(T)))
 	return &DAO[T]{database(), []byte(bucket)}
 }
 

@@ -14,7 +14,7 @@ import (
 )
 
 func SetupAndServe() {
-	slog.Info("Setting up routes")
+	slog.Info("setting up routes")
 
 	// pages
 	http.Handle("/{$}", templ.Handler(pages.Index()))
@@ -43,7 +43,7 @@ func SetupAndServe() {
 		filename := fmt.Sprintf("./assets/%s", r.PathValue("file"))
 		_, err := os.Open(filename)
 		if err != nil {
-			slog.Error(err.Error())
+			slog.Error("unable to serve file", "error", err)
 			http.Redirect(w, r, "/404", http.StatusFound)
 			return
 		}
@@ -60,7 +60,7 @@ func SetupAndServe() {
 		pages.Error().Render(r.Context(), w)
 	})
 
-	slog.Info("Starting server")
+	slog.Info("starting server")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
