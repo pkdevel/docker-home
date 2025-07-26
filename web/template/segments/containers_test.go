@@ -21,14 +21,14 @@ func TestList(t *testing.T) {
 			args: args{
 				values: nil,
 			},
-			want: `<div class="grid grid-cols-1 gap-5"></div>`,
+			want: `<div class="grid grid-cols-1 items-center gap-y-4"></div>`,
 		},
 		{
 			name: "empty",
 			args: args{
 				values: []*ContainerApp{},
 			},
-			want: `<div class="grid grid-cols-1 gap-5"></div>`,
+			want: `<div class="grid grid-cols-1 items-center gap-y-4"></div>`,
 		},
 		{
 			name: "one",
@@ -38,15 +38,14 @@ func TestList(t *testing.T) {
 				},
 			},
 			want: `
-        <div class="grid grid-cols-1 gap-5">
+        <div class="grid grid-cols-1 items-center gap-y-4">
           <a href="http://localhost:8080" target="_blank">
-            <div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
-              <p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-                one
-              </p>
-              <p class="text-sm truncate text-gray-500 dark:text-gray-400">
-                http://localhost:8080
-              </p>
+						<div class="bg-sky-400 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
+							<div class="flex items-baseline uppercase">
+              	<p>o</p>
+                <p class="text-sm">ne</p>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">http://localhost:8080</p>
             </div>
           </a>
         </div>
@@ -62,35 +61,32 @@ func TestList(t *testing.T) {
 				},
 			},
 			want: `
-        <div class="grid grid-cols-1 gap-5">
+        <div class="grid grid-cols-1 items-center gap-y-4">
           <a href="http://localhost:8080" target="_blank">
-            <div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
-              <p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-                one
-              </p>
-              <p class="text-sm truncate text-gray-500 dark:text-gray-400">
-                http://localhost:8080
-              </p>
+						<div class="bg-sky-400 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
+							<div class="flex items-baseline uppercase">
+              	<p>o</p>
+                <p class="text-sm">ne</p>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">http://localhost:8080</p>
             </div>
           </a>
           <a href="http://localhost:8081" target="_blank">
-            <div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
-              <p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-                two
-              </p>
-              <p class="text-sm truncate text-gray-500 dark:text-gray-400">
-                http://localhost:8081
-              </p>
+						<div class="bg-sky-400 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
+							<div class="flex items-baseline uppercase">
+              	<p>t</p>
+                <p class="text-sm">wo</p>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">http://localhost:8081</p>
             </div>
           </a>
           <a href="http://localhost:8082" target="_blank">
-            <div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
-              <p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-                three
-              </p>
-              <p class="text-sm truncate text-gray-500 dark:text-gray-400">
-                http://localhost:8082
-              </p>
+						<div class="bg-sky-400 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
+							<div class="flex items-baseline uppercase">
+              	<p>t</p>
+                <p class="text-sm">hree</p>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">http://localhost:8082</p>
             </div>
           </a>
         </div>

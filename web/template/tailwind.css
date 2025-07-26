@@ -10,6 +10,9 @@
     @apply bg-sky-600 px-4 py-2;
   }
 
+  .pad {
+    @apply px-4 py-6;
+  }
   .selectable {
     @apply border-2 border-transparent hover:border-inherit;
   }

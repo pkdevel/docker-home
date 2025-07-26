@@ -6,14 +6,14 @@ type ContainerApp struct {
 }
 
 templ Containers(containers []*ContainerApp) {
-	<div class="grid grid-cols-1 gap-5">
+	<div class="grid grid-cols-1 items-center gap-y-4">
 		for _, container := range containers {
 			@href(container.URL) {
-				<div class="flex-auto bg-sky-200 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
-					<p class=" text-sm font-medium text-gray-900 truncate dark:text-white">
-						{ container.Name }
-					</p>
-					<p class="text-sm truncate text-gray-500 dark:text-gray-400">
+				<div class="bg-sky-400 dark:bg-sky-800 rounded-lg px-4 py-2 selectable">
+					<div class="flex items-baseline uppercase">
+						<p>{ container.Name } </p>
+					</div>
+					<p class="text-sm text-gray-600 dark:text-gray-400">
 						{ container.URL }
 					</p>
 				</div>
