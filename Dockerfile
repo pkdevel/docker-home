@@ -25,11 +25,10 @@ RUN --mount=type=cache,target=/go/pkg/mod \
   --mount=type=bind,source=app/web,target=web,from=templ \
   GOARCH=$TARGETARCH go build -v -o /bin/docker-home ./cmd/main.go
 
-FROM scratch AS assembler
+FROM scratch
 EXPOSE 8080
 LABEL name="docker-home"
 LABEL description="A simple docker home page"
-WORKDIR /
 COPY assets assets
 COPY --from=tailwindcss app/assets/. assets/
 COPY --from=builder /bin/docker-home bin/
