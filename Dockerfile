@@ -9,10 +9,12 @@ WORKDIR /app
 COPY --chown=65532:65532 web web
 RUN ["templ", "generate"]
 
-FROM d3fk/tailwindcss:v3 AS tailwindcss
+FROM node:alpine AS tailwindcss
 WORKDIR /app
+RUN --mount=type=bind,source=package.json,target=package.json \
+  ["npm", "install"]
 RUN --mount=type=bind,source=web,target=web \
-  ["/tailwindcss", "-c", "web/tailwind.config.js", "-i", "web/template/tailwind.css", "-o", "assets/style.css", "-m"]
+  ["npx", "@tailwindcss/cli", "-i", "web/template/tailwind.css", "-o", "assets/style.css", "-m"]
 
 FROM fetcher AS builder
 WORKDIR /app

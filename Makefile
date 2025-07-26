@@ -54,8 +54,7 @@ templ-watch: _templ
 		--open-browser=false
 
 tailwind-watch: _tailwind
-	@npx --no -- tailwindcss --watch --minify \
-		-c web/tailwind.config.js \
+	@npx --no -- @tailwindcss/cli --watch --minify \
 		-i web/template/tailwind.css \
 		-o assets/style.css
 
