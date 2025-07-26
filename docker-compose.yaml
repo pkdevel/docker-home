@@ -1,0 +1,11 @@
+services:
+  docker-home:
+    image: pkdevel/docker-home:latest
+    build:
+      context: .
+    container_name: dockerhome
+    restart: unless-stopped
+    ports:
+      - 6969:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
